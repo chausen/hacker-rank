@@ -1,0 +1,38 @@
+#!/bin/python3
+
+import math
+import os
+import random
+import re
+import sys
+
+# Complete the maxSubsetSum function below.
+def maxSubsetSum(arr):
+
+    def bigmax(arr, i):
+        if i >= len(arr):
+            return 0
+        # take
+        t = bigmax(arr, i + 2) + arr[i]
+        # don't take
+        d = bigmax(arr, i + 1)
+
+        return max(t,d)
+
+    return bigmax(arr, 0)
+
+def maxSubsetSumDynamic(arr):
+
+    
+     
+
+if __name__ == '__main__':
+    n = int(input())
+    
+    arr = list(map(int, input().rstrip().split()))
+    print(arr)
+    res = maxSubsetSum(arr)
+
+    print(res)
+
+    
