@@ -1,11 +1,5 @@
 #!/bin/python3
 
-import math
-import os
-import random
-import re
-import sys
-
 #
 # Complete the 'countingValleys' function below.
 #
@@ -16,10 +10,19 @@ import sys
 #
 
 def countingValleys(steps, path):
-    # Write your code here
+    height = 0
+    valleys = 0
+    for step in path:
+        if step == 'U':
+            height += 1
+            if height == 0:
+                valleys += 1
+        else:
+            height -= 1
+
+    return valleys
 
 if __name__ == '__main__':
-    fptr = open(os.environ['OUTPUT_PATH'], 'w')
 
     steps = int(input().strip())
 
@@ -27,6 +30,4 @@ if __name__ == '__main__':
 
     result = countingValleys(steps, path)
 
-    fptr.write(str(result) + '\n')
-
-    fptr.close()
+    print(str(result))
