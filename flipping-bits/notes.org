@@ -1,0 +1,78 @@
+Normally, this problem would be as easy as:
+1. converting the number to binary
+2. using the bitwise NOT operator to flip the bits
+3. converting back to base-10
+
+However, since Python has no native support for unsigned integers (there are ways to simulate them, such as using the ctypes module), 
+this will not work.
+
+Bitwise NOT on an integer will give you the two's complement negation. For example:
+
+ 4 -> 0100
+~4 -> 1011
+
+ 5 -> 0101
+ To get -5 in two's complement we negate these bits and add 1:
+ 0101 -> 1010 -> 1011
+ We can see that -5 in two's complement (using 4 bits) is the same as ~4
+
+The way to get around this is with bit masking:
+4          -> 100
+4 & 0b1111 -> 0100
+4 & 0b11111 -> 00100
+4 & 255 -> 00000100
+
+We can do masks using base 10 (255), base 2 (0b1111), octal (0o73) or hex (0xffff)
+
+The bitmask for 32-bits would be 0xffffffff
+
+* Notes
+- logical vs arthimetic shift
+  + logical: shifts entire binary sequence, including the sign bit
+  + arthimetic: maintains the sign bit by duplicating it before shifting the bits to the right
+- Python does not use the normal two's complement representation common in C or Java
+- it uses a custom adaptive strategy that works like sign-magnitude with an unlimited # of bits; it converts back and forth between
+  a number's internal representative and two's complement to mimic the standard behavior of the arithmetic shift
+
+
+* Binary Representations
+
+** sign magnitude
+- most signficant bit is the sign bit
+- 1001 translates to -1 in sign magnitude, but would be 9 unsigned
+- symmetric range of values (between positive and negative)
+- ambiguous 0 (0000 == 0 and 1000 == -0)
+- binary arithmetic does not yield expected results; e.g., 1001 (-1) + 0001 (1) = 1010 (-2)
+- carryover bit can propogate from the magnitude to the sign bit
+
+** one's complement
+- negative numbers are obtained by flipping the corresponding positive number's bits using bitwise NOT
+- negative numbers still start with 1 and positive numbers still start with 0
+- 0 is still ambiguous
+- symmetric range of values; negative numbers are now in reverse order though:
+111 = -0
+110 = -1
+101 = -2
+100 = -3
+011 = 3
+010 = 2
+001 = 1
+000 = 0
+- can now add reliably by feeding carryover, originating from the sign bit, back to the right-edge of the sequence:
+101 (-2) + 011 (3) = 1000
+feed carryover from sign over to yield 001 (1)
+
+** two's complement
+- negative numbers obtained by finding one's complement (negation with bitwise NOT) and adding 1 to the result
+- eliminates double 0 and simplifies binary arithmetic
+- no longer symmetrical (now only one 0)
+- lower bound is power of 2 and upper bound is odd (8-bit signed int gives range of -128 to 127)
+- now the MSB carries both the sign and part of the magnitude:
+
+Bit 7	Bit 6	Bit 5	Bit 4	Bit 3	Bit 2	Bit 1	Bit 0
+-2^7	2^6	2^5	2^4	2^3	2^2	2^1	2^0
+-128	64	32	16	8	4	2	1
+
+now we can derive the decimal value by adding the columns:
+11010110 (-42)
+-128 + 64 + 16 + 4 + 2 = -42
