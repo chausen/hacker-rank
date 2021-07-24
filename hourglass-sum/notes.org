@@ -1,0 +1,27 @@
+#+BEGIN_SRC Java 
+01 02 03 04 05 06
+07 08 09 10 11 12
+13 14 15 16 17 18
+19 20 21 22 23 24
+25 26 27 28 29 30
+31 32 33 34 35 36
+#+END_SRC
+
+how many hourglasses does 15 belong to?
+7; it can be in all of the positions in the hourglass
+Boundaries dictate how many hourglasses a value belongs to
+
+
+01 02 03
+   08
+13 14 15
+
+02 03 04
+   09
+08 15 16
+
+...
+
+7 - (i
+
+
