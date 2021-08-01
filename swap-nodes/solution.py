@@ -6,20 +6,58 @@ import random
 import re
 import sys
 
-#
-# Complete the 'swapNodes' function below.
-#
-# The function is expected to return a 2D_INTEGER_ARRAY.
-# The function accepts following parameters:
-#  1. 2D_INTEGER_ARRAY indexes
-#  2. INTEGER_ARRAY queries
-#
+class Node:
+    left = None
+    right = None
+
+    def __init__(self, val):
+        self.value = val
+
+def create_tree(indexes):
+    nodes = [-1] * (len(indexes) + 1)
+    root = Node(1)
+    nodes[1] = root
+    for parent_index, children in enumerate(indexes, start=1):
+        parent_node = nodes[parent_index]
+        left, right = children[0], children[1]
+        if left != -1:
+            left_node = Node(left)
+            parent_node.left = left_node
+            nodes[left] = left_node
+        if right != -1:
+            right_node = Node(right)
+            parent_node.right = right_node
+            nodes[right] = right_node
+    return root
+    
+def in_order(node, nodes):
+    if node.left:
+        in_order(node.left, nodes)
+    nodes.append(node.value)
+    if node.right:
+        in_order(node.right, nodes)
+
+def swap_nodes(node, k, depth):
+    if depth % k == 0:
+        temp = node.left
+        node.left = node.right
+        node.right = temp
+    if node.left:
+        swap_nodes(node.left, k, depth+1)
+    if node.right:
+        swap_nodes(node.right, k, depth+1)
 
 def swapNodes(indexes, queries):
-    # Write your code here
+    results = []
+    root = create_tree(indexes)
+    for k in queries:
+        swap_nodes(root, k, 1)
+        nodes = []
+        in_order(root, nodes)
+        results.append(nodes)
+    return results
 
 if __name__ == '__main__':
-    fptr = open(os.environ['OUTPUT_PATH'], 'w')
 
     n = int(input().strip())
 
@@ -38,7 +76,4 @@ if __name__ == '__main__':
 
     result = swapNodes(indexes, queries)
 
-    fptr.write('\n'.join([' '.join(map(str, x)) for x in result]))
-    fptr.write('\n')
-
-    fptr.close()
+    print([' '.join(map(str, x)) for x in result])
