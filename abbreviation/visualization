@@ -1,0 +1,37 @@
+|
+| \
+D  _
+|\  |\
+A _ A _
+| | | |
+B B B B
+|  \ \ \
+|\  | \ \____
+C _ |\ \    |\
+    C _ |\  C _ 
+        C _
+_AB_
+_AB_
+_ABC
+_ABC
+__B_
+__B_
+__BC
+__BC
+DAB_
+DAB_
+DABC
+DABC
+D_B_
+D_B_
+D_BC
+D_BC
+
+
+
+
+DABCD - 0
+_ABCD - 1
+D_BCD - 2
+__BCD - 2
+
