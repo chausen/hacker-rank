@@ -41,13 +41,14 @@ def abbreviation(a, b):
         return 'YES'
     for i in range(len(a)):        
         for j in range(i**2-1):
-            if a.isupper():
+            if a[i].isupper():
                 next
             c = combos[j]
             c = c[:i-1] + '_' + c[i:]
             if c.replace('_', '') == b:
                 return 'YES'
             combos.append(c)
+    print(combos)
     return 'NO'
             
 if __name__ == '__main__':    
