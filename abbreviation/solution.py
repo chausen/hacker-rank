@@ -35,7 +35,10 @@ def abbreviation_recursive(a, b):
     else:
         return 'NO'
 
-def abbreviation(a, b):    
+def abbreviation(a, b): 
+    if len(a) < len(b):
+        return 'NO'
+
     combos = [a.upper()]
     if combos[0] == a:
         return 'YES'

@@ -8,38 +8,6 @@ DELETE = 2
 pp = pprint.PrettyPrinter(indent=4)
 cell = namedtuple('cell', 'cost parent')
 
-def match_out(s, t, i, j):
-    if s[i] == t[j]:
-        print('M')
-    else:
-        print('S')
-
-def insert_out(t, j):
-    print("I")
-
-def delete_out(s, i):
-    print("D")
-
-def reconstruct_path(s, t, i, j, m):
-    if (m[i][j].parent == -1):
-        return;
-    if (m[i][j].parent == MATCH):
-        reconstruct_path(s, t, i-1, j-1, m)
-        match_out(s, t, i, j)
-        return
-    if (m[i][j].parent == INSERT):
-        reconstruct_path(s, t, i, j-1, m)
-        insert_out(t, j)
-        return
-    if (m[i][j].parent == DELETE):
-        reconstruct_path(s, t, i-1, j, m)
-        delete_out(s, i)
-        return
-
-def match(a, b):
-    v = 0 if a == b else 1
-    return v
-
 def string_compare(s, t):        
     MAXLEN = max(len(s), len(t))
     m = [ [cell(0,0)] * (MAXLEN+1) for _ in range(MAXLEN+1)]
@@ -67,7 +35,44 @@ def string_compare(s, t):
 
     reconstruct_path(s, t, i, j, m)
     
-    return m[len(s)-1][len(t)-1].cost
+    goal = goal_cell(s, t, i, j, m)
+
+    return m[goal[0]][goal[1]].cost
+
+def match(a, b):
+    v = 0 if a == b else 1
+    return v
+
+def reconstruct_path(s, t, i, j, m):
+    if (m[i][j].parent == -1):
+        return;
+    if (m[i][j].parent == MATCH):
+        reconstruct_path(s, t, i-1, j-1, m)
+        match_out(s, t, i, j)
+        return
+    if (m[i][j].parent == INSERT):
+        reconstruct_path(s, t, i, j-1, m)
+        insert_out(t, j)
+        return
+    if (m[i][j].parent == DELETE):
+        reconstruct_path(s, t, i-1, j, m)
+        delete_out(s, i)
+        return
+
+def match_out(s, t, i, j):
+    if s[i] == t[j]:
+        print('M')
+    else:
+        print('S')
+
+def insert_out(t, j):
+    print("I")
+
+def delete_out(s, i):
+    print("D")        
+
+def goal_cell(s, t, i, j, m):
+    return (len(s)-1, len(t)-1)    
 
 # print(string_compare('hei', 'be'))
 # print(string_compare('hello', 'world'))
